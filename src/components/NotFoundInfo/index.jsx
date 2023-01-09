@@ -1,7 +1,6 @@
 import React from 'react';
 
 import styles from './styles.module.scss';
-console.log(styles);
 
 const NotFoundInfo = () => {
   return (
