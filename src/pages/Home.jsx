@@ -13,8 +13,6 @@ const Home = () => {
     sortProperty: 'rating',
   });
 
-  console.log(categoryId, sortType);
-
   React.useEffect(() => {
     setIsLoading(true);
 
