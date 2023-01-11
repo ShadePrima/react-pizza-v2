@@ -1,4 +1,6 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { SearchContext } from '../App';
 
 import Categories from '../components/Categories';
 import Pagination from '../components/Pagination/Pagination';
@@ -6,17 +8,31 @@ import PizzaBlock from '../components/PizzaBlock/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import Sort from '../components/Sort';
 
-const Home = ({ searchValue }) => {
+import { setCategoryId } from '../redux/slices/filterSlice';
+
+const Home = () => {
+  const dispatch = useDispatch();
+  const categoryId = useSelector((state) => state.filter.categoryId);
+
+  console.log('redux state', categoryId);
+
+  const { searchValue } = React.useContext(SearchContext);
   const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  const [categoryId, setCategoryId] = React.useState(0);
+  // const [categoryId, setCategoryId] = React.useState(0);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [sortType, setSortType] = React.useState({
     name: 'popularity',
     sortProperty: 'rating',
   });
 
-  console.log('current Page', currentPage);
+  const onChangeCategory = (id) => {
+    console.log('onChangeCategory', id);
+    dispatch(setCategoryId(id));
+  };
+
+  console.log('categoryId', categoryId);
+
   const pizzas = items
     // .filter((obj) => {
     //   if (obj.title.toLowerCase().includes(searchValue.toLowerCase())) {
@@ -55,14 +71,12 @@ const Home = ({ searchValue }) => {
   return (
     <div className='container'>
       <div className='content__top'>
-        <Categories
-          value={categoryId}
-          onChangeCategory={(index) => setCategoryId(index)}
-        />
+        <Categories value={categoryId} onChangeCategory={onChangeCategory} />
         <Sort value={sortType} onChangeSort={(index) => setSortType(index)} />
       </div>
       <h2 className='content__title'>All pizzas</h2>
       <div className='content__items'>{isLoading ? skeletons : pizzas}</div>
+
       <Pagination onChangePage={(number) => setCurrentPage(number)} />
     </div>
   );
