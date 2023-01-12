@@ -14,12 +14,9 @@ const Home = () => {
   const dispatch = useDispatch();
   const categoryId = useSelector((state) => state.filter.categoryId);
 
-  console.log('redux state', categoryId);
-
   const { searchValue } = React.useContext(SearchContext);
   const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  // const [categoryId, setCategoryId] = React.useState(0);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [sortType, setSortType] = React.useState({
     name: 'popularity',
@@ -27,11 +24,8 @@ const Home = () => {
   });
 
   const onChangeCategory = (id) => {
-    console.log('onChangeCategory', id);
     dispatch(setCategoryId(id));
   };
-
-  console.log('categoryId', categoryId);
 
   const pizzas = items
     // .filter((obj) => {
