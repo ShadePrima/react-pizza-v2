@@ -19,6 +19,8 @@ function Sort() {
   const dispatch = useDispatch();
   const sort = useSelector((state) => state.filter.sort);
 
+  const sortRef = React.useRef();
+
   const [open, setOpen] = React.useState(false);
 
   // const sortName = list[value].name;
@@ -28,8 +30,17 @@ function Sort() {
     setOpen(false);
   };
 
+  React.useEffect(() => {
+    document.body.addEventListener('click', (event) => {
+      if (!event.path.includes(sortRef.current)) {
+        setOpen(false);
+        console.log('click outside');
+      }
+    });
+  }, []);
+
   return (
-    <div className='sort'>
+    <div ref={sortRef} className='sort'>
       <div className='sort__label'>
         <img src={arrowTop} alt='arrow-top' />
 
