@@ -32,6 +32,7 @@ function Sort() {
         <img src={arrowTop} alt='arrow-top' />
 
         <b>Sort by:</b>
+
         <span onClick={() => setOpen(!open)}>{sort.name}</span>
       </div>
       {open && (
