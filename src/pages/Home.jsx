@@ -21,6 +21,10 @@ const Home = () => {
   // put string in addres string
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const isSearch = React.useRef(false);
+  const isMounted = React.useRef(false);
+
   const { categoryId, sort, currentPage } = useSelector(
     (state) => state.filter
   );
@@ -51,25 +55,7 @@ const Home = () => {
     <Skeleton key={index} />
   ));
 
-  //parsim parametr from adres string
-  React.useEffect(() => {
-    if (window.location.search) {
-      const params = qs.parse(window.location.search.substring(1));
-
-      const sort = sortList.find(
-        (obj) => obj.sortProperty === params.sortProperty
-      );
-
-      dispatch(
-        setFilters({
-          ...params,
-          sort,
-        })
-      );
-    }
-  }, []);
-
-  React.useEffect(() => {
+  const fetchPizzas = () => {
     setIsLoading(true);
 
     const order = sort.sortProperty.includes('-') ? 'asc' : 'desc';
@@ -97,20 +83,56 @@ const Home = () => {
         setItems(res.data);
         setIsLoading(false);
       });
+  };
 
-    window.scrollTo(0, 0);
-  }, [categoryId, sort.sortProperty, searchValue, currentPage]);
+  //if first render in not to be  then don't put params
+  //if first render is to be then we change params and put them in adress string
 
   React.useEffect(() => {
-    const queryString = qs.stringify({
-      sortProperty: sort.sortProperty,
-      categoryId,
-      currentPage,
-    });
+    if (isMounted.current) {
+      const queryString = qs.stringify({
+        sortProperty: sort.sortProperty,
+        categoryId,
+        currentPage,
+      });
 
-    navigate(`?${queryString}`);
-    console.log('Home', queryString);
+      navigate(`?${queryString}`);
+    }
+
+    isMounted.current = true;
   }, [categoryId, sort.sortProperty, currentPage]);
+
+  //if to be first render then we chack papams and seved in redux
+  React.useEffect(() => {
+    if (window.location.search) {
+      const params = qs.parse(window.location.search.substring(1));
+
+      const sort = sortList.find(
+        (obj) => obj.sortProperty === params.sortProperty
+      );
+
+      dispatch(
+        setFilters({
+          ...params,
+          sort,
+        })
+      );
+
+      isSearch.current = true;
+    }
+  }, []);
+
+  //if to be first render then we fetch pizzas
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+
+    if (!isSearch.current) {
+      fetchPizzas();
+    }
+
+    isSearch.current = false;
+  }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
   return (
     <div className='container'>
