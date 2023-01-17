@@ -55,7 +55,7 @@ const Home = () => {
     <Skeleton key={index} />
   ));
 
-  const fetchPizzas = () => {
+  const fetchPizzas = async () => {
     setIsLoading(true);
 
     const order = sort.sortProperty.includes('-') ? 'asc' : 'desc';
@@ -75,14 +75,34 @@ const Home = () => {
     //     console.log(error);
     //   });
 
-    axios
-      .get(
+    // axios library
+
+    // await axios
+    //   .get(
+    //     `https://-62cc78498042b16aa7cff6cc.mockapi.io/items?page=${currentPage}&limit=4${category}&sortBy=${sortBy}&order=${order}${search}`
+    //   )
+    //   .then((res) => {
+    //     setItems(res.data);
+    //     setIsLoading(false);
+    //     console.log(666);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err, 'exios error');
+    //     setIsLoading(false);
+    //   });
+
+    try {
+      const res = await axios.get(
         `https://62cc78498042b16aa7cff6cc.mockapi.io/items?page=${currentPage}&limit=4${category}&sortBy=${sortBy}&order=${order}${search}`
-      )
-      .then((res) => {
-        setItems(res.data);
-        setIsLoading(false);
-      });
+      );
+      setItems(res.data);
+      window.scrollTo(0, 0);
+    } catch (error) {
+      alert('Error while getting pizzas');
+      console.log('Error while getting pizzas', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   //if first render in not to be  then don't put params
