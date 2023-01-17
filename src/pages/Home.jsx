@@ -16,6 +16,7 @@ import {
   setFilters,
 } from '../redux/slices/filterSlice';
 import { useNavigate } from 'react-router-dom';
+import { setItems } from '../redux/slices/pizzaSlice';
 
 const Home = () => {
   // put string in addres string
@@ -25,12 +26,13 @@ const Home = () => {
   const isSearch = React.useRef(false);
   const isMounted = React.useRef(false);
 
+  const items = useSelector((state) => state.pizza.items);
   const { categoryId, sort, currentPage } = useSelector(
     (state) => state.filter
   );
 
   const { searchValue } = React.useContext(SearchContext);
-  const [items, setItems] = React.useState([]);
+  // const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   // const [currentPage, setCurrentPage] = React.useState(1);
 
@@ -51,6 +53,7 @@ const Home = () => {
     //   }
     // })
     .map((obj) => <PizzaBlock key={obj.id} {...obj} />);
+
   const skeletons = [...new Array(4)].map((_, index) => (
     <Skeleton key={index} />
   ));
@@ -92,10 +95,11 @@ const Home = () => {
     //   });
 
     try {
-      const res = await axios.get(
+      const { data } = await axios.get(
         `https://62cc78498042b16aa7cff6cc.mockapi.io/items?page=${currentPage}&limit=4${category}&sortBy=${sortBy}&order=${order}${search}`
       );
-      setItems(res.data);
+
+      dispatch(setItems(data));
       window.scrollTo(0, 0);
     } catch (error) {
       alert('Error while getting pizzas');
