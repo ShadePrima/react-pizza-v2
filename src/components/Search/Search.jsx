@@ -1,27 +1,23 @@
 import React from 'react';
-import { SearchContext } from '../../App';
+import { useDispatch } from 'react-redux';
+
+import { setSearchValue } from '../../redux/slices/filterSlice';
 
 import styles from './Search.module.scss';
 import headerSearchIcon from '../../assets/img/icons/header-search.svg';
 import headerCloseIcon from '../../assets/img/icons/header-close.svg';
+
 import debounce from 'lodash.debounce';
 
 const Search = () => {
+  const dispatch = useDispatch();
   const [value, setValue] = React.useState('');
-  const { setSearchValue } = React.useContext(SearchContext);
 
   const inputRef = React.useRef(null);
 
-  // const testDebouns = React.useCallback(
-  //   debounce(() => {
-  //     setSearchValue(event.target.value);
-  //   }, 1500),
-  //   []
-  // );
-
   const onClickClear = () => {
     setValue('');
-    setSearchValue('');
+    dispatch(setSearchValue(''));
     //make the field focus after typing
     inputRef.current.focus();
   };
@@ -29,7 +25,7 @@ const Search = () => {
   const updateSearchValue = React.useCallback(
     debounce((str) => {
       console.log(str);
-      setSearchValue(str);
+      dispatch(setSearchValue(str));
     }, 500),
     []
   );

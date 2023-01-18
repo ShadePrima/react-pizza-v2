@@ -1,7 +1,5 @@
-import axios from 'axios';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SearchContext } from '../App';
 import qs from 'qs';
 
 import Categories from '../components/Categories';
@@ -16,7 +14,7 @@ import {
   setFilters,
 } from '../redux/slices/filterSlice';
 import { useNavigate } from 'react-router-dom';
-import { setItems } from '../redux/slices/pizzaSlice';
+import { fetchPizzas } from '../redux/slices/pizzaSlice';
 
 const Home = () => {
   // put string in addres string
@@ -26,15 +24,11 @@ const Home = () => {
   const isSearch = React.useRef(false);
   const isMounted = React.useRef(false);
 
-  const items = useSelector((state) => state.pizza.items);
-  const { categoryId, sort, currentPage } = useSelector(
+  const { items, status } = useSelector((state) => state.pizza);
+
+  const { categoryId, sort, currentPage, searchValue } = useSelector(
     (state) => state.filter
   );
-
-  const { searchValue } = React.useContext(SearchContext);
-  // const [items, setItems] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(true);
-  // const [currentPage, setCurrentPage] = React.useState(1);
 
   const onChangeCategory = (id) => {
     dispatch(setCategoryId(id));
@@ -58,9 +52,7 @@ const Home = () => {
     <Skeleton key={index} />
   ));
 
-  const fetchPizzas = async () => {
-    setIsLoading(true);
-
+  const getPizzas = async () => {
     const order = sort.sortProperty.includes('-') ? 'asc' : 'desc';
     const sortBy = sort.sortProperty.replace('-', '');
     const category = categoryId > 0 ? `&category=${categoryId}` : '';
@@ -94,19 +86,39 @@ const Home = () => {
     //     setIsLoading(false);
     //   });
 
-    try {
-      const { data } = await axios.get(
-        `https://62cc78498042b16aa7cff6cc.mockapi.io/items?page=${currentPage}&limit=4${category}&sortBy=${sortBy}&order=${order}${search}`
-      );
+    // third variant
 
-      dispatch(setItems(data));
-      window.scrollTo(0, 0);
-    } catch (error) {
-      alert('Error while getting pizzas');
-      console.log('Error while getting pizzas', error);
-    } finally {
-      setIsLoading(false);
-    }
+    //   try {
+    //     console.log(555);
+    //     dispatch(
+    //       fetchPizzas({
+    //         order,
+    //         sortBy,
+    //         category,
+    //         search,
+    //         currentPage,
+    //       })
+    //     );
+    //     window.scrollTo(0, 0);
+    //   } catch (error) {
+    //     alert('Error while getting pizzas');
+    //     console.log('Error while getting pizzas', error);
+    //   } finally {
+    //     setIsLoading(false);
+    //   }
+    // };
+
+    dispatch(
+      fetchPizzas({
+        order,
+        sortBy,
+        category,
+        search,
+        currentPage,
+      })
+    );
+
+    window.scrollTo(0, 0);
   };
 
   //if first render in not to be  then don't put params
@@ -149,13 +161,7 @@ const Home = () => {
   //if to be first render then we fetch pizzas
 
   React.useEffect(() => {
-    window.scrollTo(0, 0);
-
-    if (!isSearch.current) {
-      fetchPizzas();
-    }
-
-    isSearch.current = false;
+    getPizzas();
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
   return (
@@ -165,7 +171,17 @@ const Home = () => {
         <Sort />
       </div>
       <h2 className='content__title'>All pizzas</h2>
-      <div className='content__items'>{isLoading ? skeletons : pizzas}</div>
+
+      {status === 'error' ? (
+        <div className='content__error-info'>
+          <h2>The error is occurred &#128533;</h2>
+          <p>Pizzas don't found</p>
+        </div>
+      ) : (
+        <div className='content__items'>
+          {status === 'loading' ? skeletons : pizzas}
+        </div>
+      )}
 
       <Pagination currentPage={currentPage} onChangePage={onChangePage} />
     </div>
