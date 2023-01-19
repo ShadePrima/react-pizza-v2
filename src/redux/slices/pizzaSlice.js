@@ -9,7 +9,6 @@ export const fetchPizzas = createAsyncThunk(
       `https://62cc78498042b16aa7cff6cc.mockapi.io/items?page=${currentPage}&limit=4${category}&sortBy=${sortBy}&order=${order}${search}`
     );
 
-    console.log('thunkAPI', thunkAPI);
     return data;
   }
 );
