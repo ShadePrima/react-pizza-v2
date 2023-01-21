@@ -15,7 +15,8 @@ const Search: React.FC = () => {
 
   const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const onClickClear = () => {
+  const onClickClear = (event: React.MouseEvent<HTMLImageElement>) => {
+    // console.log(event);
     setValue('');
     dispatch(setSearchValue(''));
     //make the field focus after typing
@@ -32,7 +33,7 @@ const Search: React.FC = () => {
     []
   );
 
-  const onChangeInput = (event: any) => {
+  const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
     updateSearchValue(event.target.value);
   };
@@ -51,7 +52,7 @@ const Search: React.FC = () => {
 
       {value && (
         <img
-          onClick={() => onClickClear()}
+          onClick={onClickClear}
           className={styles.closeIcon}
           src={headerCloseIcon}
           alt='Close'

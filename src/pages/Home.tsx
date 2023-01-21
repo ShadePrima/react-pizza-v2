@@ -30,8 +30,8 @@ const Home: React.FC = () => {
     (state: any) => state.filter
   );
 
-  const onChangeCategory = (id: number) => {
-    dispatch(setCategoryId(id));
+  const onChangeCategory = (index: number) => {
+    dispatch(setCategoryId(index));
   };
 
   const onChangePage = (page: number) => {
