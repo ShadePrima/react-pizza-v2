@@ -5,10 +5,28 @@ import { addItem } from '../../redux/slices/cartSlice';
 
 const typeName = ['thin', 'traditional'];
 
-const PizzaBlock = ({ id, price, title, imageUrl, sizes, types }) => {
+type PizzaBlockProps = {
+  id: string;
+  price: number;
+  title: string;
+  imageUrl: string;
+  sizes: number[];
+  types: number[];
+  rating: number;
+};
+
+const PizzaBlock: React.FC<PizzaBlockProps> = ({
+  id,
+  price,
+  title,
+  imageUrl,
+  sizes,
+  types,
+  rating,
+}) => {
   const dispatch = useDispatch();
-  const cartItem = useSelector((state) =>
-    state.cart.items.find((obj) => obj.id === id)
+  const cartItem = useSelector((state: any) =>
+    state.cart.items.find((obj: any) => obj.id === id)
   );
 
   const addedCount = cartItem ? cartItem.count : 0;

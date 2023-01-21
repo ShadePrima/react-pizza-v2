@@ -1,7 +1,7 @@
 import React from 'react';
-import NotFoundInfo from '../components/NotFoundInfo';
+import NotFoundInfo from '../components/NotFoundInfo/index.tsx';
 
-const NotFound = () => {
+const NotFound: React.FC = () => {
   return (
     <div>
       <NotFoundInfo />
