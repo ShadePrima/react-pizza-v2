@@ -1,12 +1,12 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSort } from '../redux/slices/filterSlice';
+import { setSort, Sort, SortPropertyEnum } from '../redux/slices/filterSlice';
 
 import arrowTop from '../assets/img/icons/sort-arrow-top.svg';
 
 type sortListItem = {
   name: string;
-  sortProperty: string;
+  sortProperty: SortPropertyEnum;
 };
 
 type PopupClick = MouseEvent & {
@@ -14,17 +14,17 @@ type PopupClick = MouseEvent & {
 };
 
 export const sortList: sortListItem[] = [
-  { name: 'popularity(DESC)', sortProperty: 'rating' },
-  { name: 'popularity(ASC)', sortProperty: '-rating' },
+  { name: 'popularity(DESC)', sortProperty: SortPropertyEnum.RATING_DESC },
+  { name: 'popularity(ASC)', sortProperty: SortPropertyEnum.RATING_ASC },
 
-  { name: 'price (DESC)', sortProperty: 'price' },
-  { name: 'price (ASC)', sortProperty: '-price' },
+  { name: 'price (DESC)', sortProperty: SortPropertyEnum.PRICE_DESC },
+  { name: 'price (ASC)', sortProperty: SortPropertyEnum.PRICE_ASC },
 
-  { name: 'alphabetical(DESC)', sortProperty: 'title' },
-  { name: 'alphabetical(ASC)', sortProperty: '-title' },
+  { name: 'alphabetical(DESC)', sortProperty: SortPropertyEnum.TITLE_DESC },
+  { name: 'alphabetical(ASC)', sortProperty: SortPropertyEnum.TITLE_ASC },
 ];
 
-function Sort() {
+function SortPopup() {
   const dispatch = useDispatch();
   const sort = useSelector((state: any) => state.filter.sort);
 
@@ -84,4 +84,4 @@ function Sort() {
   );
 }
 
-export default Sort;
+export default SortPopup;
