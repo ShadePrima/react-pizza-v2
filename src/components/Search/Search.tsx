@@ -1,13 +1,12 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import { setSearchValue } from '../../redux/slices/filterSlice';
-
 import styles from './Search.module.scss';
 import headerSearchIcon from '../../assets/img/icons/header-search.svg';
 import headerCloseIcon from '../../assets/img/icons/header-close.svg';
 
 import debounce from 'lodash.debounce';
+import { setSearchValue } from '../../redux/slices/filter/slice';
 
 const Search: React.FC = () => {
   const dispatch = useDispatch();

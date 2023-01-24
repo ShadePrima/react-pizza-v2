@@ -1,8 +1,9 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { setSort, Sort, SortPropertyEnum } from '../redux/slices/filterSlice';
 
 import arrowTop from '../assets/img/icons/sort-arrow-top.svg';
+import { setSort } from '../redux/slices/filter/slice';
+import { Sort, SortPropertyEnum } from '../redux/slices/filter/types';
 
 type sortListItem = {
   name: string;

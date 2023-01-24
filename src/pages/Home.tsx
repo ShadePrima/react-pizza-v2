@@ -1,6 +1,7 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../redux/store';
 import qs from 'qs';
 
 import Categories from '../components/Categories';
@@ -10,13 +11,11 @@ import Skeleton from '../components/PizzaBlock/Skeleton';
 import Sort, { sortList } from '../components/Sort';
 
 import {
-  FilterSliceState,
   setCategoryId,
   setCurrentPage,
   setFilters,
-} from '../redux/slices/filterSlice';
-import { fetchPizzas, SearchPizzaParams } from '../redux/slices/pizzaSlice';
-import { useAppDispatch } from '../redux/store';
+} from '../redux/slices/filter/slice';
+import { fetchPizzas, SearchPizzaParams } from '../redux/slices/pizza/slece';
 
 const Home: React.FC = () => {
   // put string in addres string
